@@ -8,12 +8,14 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from 'vue';
-import { useRoute } from 'vue-router';
-
+import { useRoute, useRouter } from 'vue-router';
+import axios from "@/plugins/axios.js";
 import AuthLayout from "@/layouts/AuthLayout";
 import Layout from "@/layouts/Layout";
 
+
 const route = useRoute();
+const router = useRouter()
 
 const layout = computed(() => {
   return route.meta.layout === 'auth' ? AuthLayout : Layout;
@@ -46,12 +48,25 @@ const items = [
 
 const userName = ref("");
 
-const updatePage = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if(user && user.username){
-    userName.value = user.username;
-  } else {
-    userName.value = ""
+const updatePage =async () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(user && user.username){
+      const res = await axios.get("/user/");
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        userName.value = res.data.user.username;
+      } else {
+        localStorage.removeItem("token")
+        localStorage.removeItem("user");
+        router.push("/login");
+      }
+    } else {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user");
+      router.push("/login");
+    }
   }
 }
 

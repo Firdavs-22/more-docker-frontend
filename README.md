@@ -7,6 +7,7 @@
 - Vue.js
 - Vuetify
 - Vite
+- Axios
 - more-docker
 
 ## 実行方法

@@ -42,9 +42,8 @@
     <v-navigation-drawer
       v-if="$vuetify.display.smAndDown"
       v-model="drawer"
-      location="top"
+      location="left"
       temporary
-      :width="(items.length * 50)"
     >
       <v-list class="py-0" slim>
         <v-list-item
