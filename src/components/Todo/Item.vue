@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import {defineProps, defineEmits, ref} from 'vue'
+import {defineProps, defineEmits} from 'vue'
 import {formatDate} from '@/utils/date'
 
 const props = defineProps({
