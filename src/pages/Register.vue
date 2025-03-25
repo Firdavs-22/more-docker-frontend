@@ -158,6 +158,8 @@ const register = async () => {
     }
   } catch (e) {
     console.log("Error: ", e)
+    password.value = ''
+    confirmPassword.value = ''
     if (e.response && e.response.status === 409) {
       emailError.value = "Email is already taken."
     } else if (e.response && e.response.status === 401) {

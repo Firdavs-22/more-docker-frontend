@@ -125,6 +125,7 @@ const login = async () => {
     }
   } catch (e) {
     console.log(e)
+    password.value = ""
     if (e.response && e.response.status === 401) {
       passwordError.value = "Invalid email or password."
     } else if (e.response && e.response.status === 404) {
