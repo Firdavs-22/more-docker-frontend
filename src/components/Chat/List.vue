@@ -1,7 +1,6 @@
 <template>
   <div v-if="connected !== null">
     <div ref="chatContainer" class="chat-container" @scroll="handleScroll">
-
       <v-list>
         <Item
           v-for="message in messages"
@@ -58,7 +57,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 import Item from "@/components/Chat/Item.vue";
 
 const props = defineProps({
@@ -93,7 +92,7 @@ const errorMessage = ref("")
 const handleScroll = () => {
   if (chatContainer.value) {
     const threshold = 50
-    const position = chatContainer.value.scrollTop + chatContainer.value.clientHeight
+    const position = chatContainer.value.scrollTop
     const height = chatContainer.value.scrollHeight
     atBottom.value = position >= height - threshold
   }
@@ -115,6 +114,11 @@ const scrollToBottom = () => {
 }
 
 onMounted(scrollToBottom)
+
+watch(props.messages, async () => {
+  await nextTick()
+  scrollToBottomSmooth()
+})
 
 </script>
 

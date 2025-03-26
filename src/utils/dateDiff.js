@@ -15,6 +15,6 @@ export function getTimeDifference(createdAt) {
   } else if (minutes > 0) {
     return `${minutes} minute(s) ago`;
   } else {
-    return `${seconds} second(s) ago`;
+    return `now`;
   }
 }
