@@ -3,16 +3,12 @@
     class="mx-auto"
     max-width="600"
   >
-    <v-toolbar color="secondary">
+    <v-toolbar image="https://cdn.vuetifyjs.com/docs/images/cards/purple-flowers.jpg">
       <v-toolbar-title>Users</v-toolbar-title>
-
       <v-btn icon="mdi-magnify" variant="text"></v-btn>
-
-
     </v-toolbar>
 
     <v-list lines="two">
-
       <v-list-item
         v-for="user in users"
         :key="user.id"

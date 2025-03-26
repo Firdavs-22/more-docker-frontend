@@ -1,47 +1,43 @@
 <template>
-  <v-card class="mx-auto my-5" max-width="600" elevation="5">
-    <v-card-title class="headline grey lighten-3">
-      Chat
-    </v-card-title>
+  <v-card class="mx-auto" max-width="600">
+    <v-toolbar image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg" title="Chat"/>
 
-    <v-card-text>
-      <div ref="chatContainer" class="chat-container" @scroll="handleScroll">
-        <v-list>
-          <v-list-item
-            v-for="(message, index) in messages"
-            :key="index"
-            class="chat-message mb-2"
-            lines
-          >
-            <template v-slot:prepend>
-              <v-avatar color="blue lighten-4">
-                <v-icon icon="mdi-account" size="36"/>
-              </v-avatar>
-            </template>
+    <div ref="chatContainer" class="chat-container" @scroll="handleScroll">
+      <v-list>
+        <v-list-item
+          v-for="(message, index) in messages"
+          :key="index"
+          class="chat-message mb-2"
+          lines
+        >
+          <template v-slot:prepend>
+            <v-avatar color="blue lighten-4">
+              <v-icon icon="mdi-account" size="36"/>
+            </v-avatar>
+          </template>
 
-            <v-list-item-title class="font-weight-bold">
-              {{ message.user }}
-              <span class="text-caption text-disabled ml-3">
+          <v-list-item-title class="font-weight-bold">
+            {{ message.user }}
+            <span class="text-caption text-disabled ml-3">
               {{ getTimeDifference(message.created_at) }}
             </span>
-            </v-list-item-title>
+          </v-list-item-title>
 
-            <v-list-item-subtitle>
-              {{ message.text }}
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-          <v-btn
-            :class="{ hidden: atBottom }"
-            color="grey-lighten-1"
-            variant="flat"
-            @click="scrollToBottom"
-            class="sticky-button"
-            icon="mdi-chevron-down"
-            :disabled="atBottom"
-          />
-      </div>
-    </v-card-text>
+          <v-list-item-subtitle>
+            {{ message.text }}
+          </v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <v-btn
+        :class="{ hidden: atBottom }"
+        color="grey-lighten-1"
+        variant="flat"
+        @click="scrollToBottomSmooth"
+        class="sticky-button"
+        icon="mdi-chevron-down"
+        :disabled="atBottom"
+      />
+    </div>
 
     <v-divider></v-divider>
 
@@ -176,7 +172,7 @@ const handleScroll = () => {
   }
 }
 
-const scrollToBottom = () => {
+const scrollToBottomSmooth = () => {
   if (chatContainer.value) {
     chatContainer.value.scrollTo({
       top: chatContainer.value.scrollHeight,
@@ -184,6 +180,13 @@ const scrollToBottom = () => {
     })
   }
 }
+
+const scrollToBottom = () => {
+  if (chatContainer.value) {
+    chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+  }
+}
+
 
 onMounted(scrollToBottom)
 </script>
