@@ -55,20 +55,28 @@ const items = [
 
 const userName = ref("");
 
-const updatePage =async () => {
+const updatePage = async () => {
   const token = localStorage.getItem("token");
   if (token) {
     const user = JSON.parse(localStorage.getItem("user"));
     if(user && user.username){
-      const res = await axios.get("/user/");
-      if (res.status === 200) {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        userName.value = res.data.user.username;
-      } else {
+      try {
+        const res = await axios.get("/user/");
+        if (res.status === 200) {
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          userName.value = res.data.user.username;
+        } else {
+          localStorage.removeItem("token")
+          localStorage.removeItem("user");
+          router.push("/login");
+        }
+      } catch (e) {
+        console.log("Error on Checking user",e);
         localStorage.removeItem("token")
         localStorage.removeItem("user");
         router.push("/login");
       }
+
     } else {
       localStorage.removeItem("token")
       localStorage.removeItem("user");

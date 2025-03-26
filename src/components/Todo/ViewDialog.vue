@@ -47,8 +47,6 @@ const props = defineProps({
   task: Object
 })
 
-console.log(props.task)
-
 const emit = defineEmits(['update:dialog'])
 
 const closeDialog = () => emit('update:dialog', false)

@@ -101,6 +101,7 @@ const toggleDone = async (item) => {
     const res = await axios.patch(`/todos/${item.id}/complete`)
     if (res.status === 200) {
       item.completed = true
+      item.completed_at = res.data.todo.completed_at
     }
   } catch (e) {
     console.log("Error on complete task", e)
