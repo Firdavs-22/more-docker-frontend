@@ -61,7 +61,7 @@ const updatePage = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if(user && user.username){
       try {
-        const res = await axios.get("/user/");
+        const res = await axios.get("/user/me");
         if (res.status === 200) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           userName.value = res.data.user.username;
