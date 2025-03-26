@@ -4,7 +4,7 @@
     :subtitle="getTimeDifference(user.last_login_at)"
   >
     <template v-slot:prepend>
-      <v-avatar color="grey-lighten-3" :icon="`mdi-${icons[user.id % icons.length]}`"/>
+      <v-avatar color="grey-lighten-3" :icon="getAvatar(user.id)"/>
     </template>
 
     <template v-slot:append>
@@ -27,6 +27,7 @@
 
 <script setup>
 import {getTimeDifference} from "@/utils/dateDiff.js";
+import {getAvatar} from "@/utils/getAvatar.js";
 
 const props = defineProps({
   user: {
@@ -35,21 +36,7 @@ const props = defineProps({
   },
 });
 
-const icons = [
-  'account',
-  'account-outline',
-  'account-cowboy-hat',
-  'account-cowboy-hat-outline',
-  'account-hard-hat-outline',
-  'account-hard-hat',
-  'account-school-outline',
-  'account-school',
-  'account-tie-hat-outline',
-  'account-tie-hat',
-  'account-tie-outline',
-  'account-tie',
-  'account-tie-woman',
-]
+
 
 </script>
 

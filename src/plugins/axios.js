@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "@/plugins/router";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: import.meta.env.VITE_APP_API_URL+"/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json"

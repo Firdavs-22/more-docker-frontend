@@ -2,7 +2,7 @@
   <v-card class="mx-auto" max-width="600">
     <v-toolbar image="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
       <v-toolbar-title text="Todo List"/>
-      <v-card-actions class="pr-6">
+      <v-card-actions class="pr-3">
         <v-btn color="green-lighten-1" variant="flat" @click="openAddDialog" text="Add New Task"/>
       </v-card-actions>
     </v-toolbar>
