@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {io} from 'socket.io-client'
 import {nextTick} from "vue";
 import {useRouter} from "vue-router";
+import {useToastStore} from "@/stores/toast"
 
 export const useSocketStore = defineStore('socket', {
   state: () => ({
@@ -10,7 +11,8 @@ export const useSocketStore = defineStore('socket', {
     socket: null,
     isLastMessage: true,
     lastMessageId: null,
-    isFirstLoad: true
+    isFirstLoad: true,
+    toastStore: useToastStore(),
   }),
   actions: {
     async connect(callback) {
@@ -28,7 +30,7 @@ export const useSocketStore = defineStore('socket', {
           }
         })
         this.socket.on('connect', () => {
-          console.log("Connected to socket")
+          this.toastStore.addToast("Connected to chat")
           callback()
           this.connected = true
           if (this.isFirstLoad) {
@@ -38,7 +40,9 @@ export const useSocketStore = defineStore('socket', {
           }
         })
         this.socket.on('disconnect', () => {
-          console.log("Disconnected from socket")
+          this.toastStore.addToast("Disconnected from chat", {
+            type: 'warning'
+          })
           this.connected = false
         })
       } catch (e) {

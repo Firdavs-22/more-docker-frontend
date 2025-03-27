@@ -32,7 +32,7 @@
             <v-list>
               <v-list-item link title="Update profile"/>
 
-              <v-list-item link title="Sign out" @click="signOut" />
+              <v-list-item link title="Sign out" @click="signOut"/>
             </v-list>
           </v-menu>
         </v-btn>
@@ -62,6 +62,15 @@
       <div class="pa-4 pt-6">
         <slot/>
       </div>
+
+      <Toast
+        v-for="(toast,i) in toastStore.toasts"
+        :key="toast.id"
+        :toast="toast"
+        :style="{ marginBottom: calcMargin(i) }"
+        @close="toastStore.removeToast"
+      />
+
     </v-main>
   </v-layout>
 </template>
@@ -69,9 +78,18 @@
 <script setup>
 import {shallowRef} from 'vue'
 import {useRoute, useRouter} from "vue-router";
+import {useSocketStore} from "@/stores/socket";
+import {useToastStore} from "@/stores/toast";
+import Toast from "@/components/UI/Toast.vue";
 
 const route = useRoute();
 const router = useRouter();
+const socket = useSocketStore()
+const toastStore = useToastStore()
+
+function calcMargin(i) {
+  return (i * 60) + 'px';
+}
 
 const drawer = shallowRef(false)
 const props = defineProps({
@@ -88,6 +106,7 @@ const props = defineProps({
 const signOut = () => {
   localStorage.removeItem("token")
   localStorage.removeItem("user")
+  socket.disconnect()
   router.push("/login")
 }
 </script>
