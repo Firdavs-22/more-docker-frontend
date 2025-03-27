@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {io} from 'socket.io-client'
 import {nextTick} from "vue";
 import {useRouter} from "vue-router";
+import {th} from "vuetify/locale";
 
 export const useSocketStore = defineStore('socket', {
   state: () => ({
@@ -9,7 +10,8 @@ export const useSocketStore = defineStore('socket', {
     messages: [],
     socket: null,
     isLastMessage: true,
-    lastMessageId: null
+    lastMessageId: null,
+    isFirstLoad: true
   }),
   actions: {
     async connect(callback) {
@@ -27,12 +29,17 @@ export const useSocketStore = defineStore('socket', {
           }
         })
         this.socket.on('connect', () => {
+          console.log("Connected to socket")
           callback()
           this.connected = true
-          this.setupSocketListeners()
-          this.socket.emit('getAllMessages')
+          if (this.isFirstLoad) {
+            this.isFirstLoad = false
+            this.setupSocketListeners()
+            this.socket.emit('getAllMessages')
+          }
         })
         this.socket.on('disconnect', () => {
+          console.log("Disconnected from socket")
           this.connected = false
         })
       } catch (e) {
@@ -53,7 +60,6 @@ export const useSocketStore = defineStore('socket', {
           this.lastMessageId = null
         }
         this.isLastMessage = false
-        data.reverse()
         this.lastMessageId = data[0].id
 
         this.messages = data
@@ -72,7 +78,6 @@ export const useSocketStore = defineStore('socket', {
         const currentScrollHeight = chatContainer.scrollHeight
         const currentScrollTop = chatContainer.scrollTop
 
-        data.reverse()
         if (data.length === 0 || data.length < 20) {
           this.isLastMessage = true
           this.lastMessageId = null
@@ -103,6 +108,10 @@ export const useSocketStore = defineStore('socket', {
       if (this.socket) {
         this.socket.disconnect()
         this.connected = null
+        this.messages = []
+        this.isLastMessage = true
+        this.lastMessageId = null
+        this.isFirstLoad = true
       }
     },
     scrollToBottom() {
