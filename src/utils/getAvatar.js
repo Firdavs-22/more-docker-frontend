@@ -2,6 +2,10 @@ export const getAvatar = (number) => {
   return `mdi-${icons[number % icons.length]}`
 }
 
+export const getColor = (number) => {
+  return colors[number % colors.length]
+}
+
 const icons = [
   'account',
   'account-outline',
@@ -16,4 +20,19 @@ const icons = [
   'account-tie-outline',
   'account-tie',
   'account-tie-woman',
+]
+
+const colors = [
+  'red',
+  'green',
+  'blue',
+  'yellow',
+  'purple',
+  'pink',
+  'orange',
+  'indigo',
+  'teal',
+  'cyan',
+  'brown',
+  'grey',
 ]

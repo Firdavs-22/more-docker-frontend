@@ -4,7 +4,7 @@
     :subtitle="getTimeDifference(user.last_login_at)"
   >
     <template v-slot:prepend>
-      <v-avatar color="grey-lighten-3" :icon="getAvatar(user.id)"/>
+      <v-avatar :color="getColor(user.id)" :icon="getAvatar(user.id)"/>
     </template>
 
     <template v-slot:append>
@@ -27,7 +27,7 @@
 
 <script setup>
 import {getTimeDifference} from "@/utils/dateDiff.js";
-import {getAvatar} from "@/utils/getAvatar.js";
+import {getAvatar, getColor} from "@/utils/getAvatar.js";
 
 const props = defineProps({
   user: {

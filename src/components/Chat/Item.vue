@@ -1,7 +1,7 @@
 <template>
   <v-list-item class="chat-message mb-2" lines>
     <template v-slot:prepend>
-      <v-avatar color="blue lighten-4">
+      <v-avatar :color="getColor(message.user_id)">
         <v-icon :icon="getAvatar(message.user_id)" size="36"/>
       </v-avatar>
     </template>
@@ -22,7 +22,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { getTimeDifference } from '@/utils/dateDiff.js'
-import { getAvatar } from '@/utils/getAvatar.js'
+import {getAvatar, getColor} from '@/utils/getAvatar.js'
 
 const props = defineProps({
   message: {

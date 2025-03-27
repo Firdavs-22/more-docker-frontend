@@ -91,8 +91,8 @@ const errorMessage = ref("")
 
 const handleScroll = () => {
   if (chatContainer.value) {
-    const threshold = 50
-    const position = chatContainer.value.scrollTop
+    const threshold = 100
+    const position = chatContainer.value.scrollTop + chatContainer.value.clientHeight
     const height = chatContainer.value.scrollHeight
     atBottom.value = position >= height - threshold
   }
@@ -115,9 +115,8 @@ const scrollToBottom = () => {
 
 onMounted(scrollToBottom)
 
-watch(props.messages, async () => {
-  await nextTick()
-  scrollToBottomSmooth()
+watch(props.messages, () => {
+  nextTick().then(() => scrollToBottom())
 })
 
 </script>
@@ -137,6 +136,6 @@ watch(props.messages, async () => {
 
 .hidden {
   opacity: 0;
-  transition: opacity 0.5s ease-in;
+  transition: opacity 0.3s linear;
 }
 </style>

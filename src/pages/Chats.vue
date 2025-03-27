@@ -22,77 +22,19 @@
 
 
 <script setup>
-import {ref} from 'vue'
-import {io} from 'socket.io-client'
-import {useRouter} from 'vue-router'
-
+import {storeToRefs} from "pinia";
+import {useSocketStore} from '@/stores/socket'
 import Connect from "@/components/Chat/Connect";
 import List from "@/components/Chat/List";
 
-const router = useRouter()
-const connected = ref(null)
-const messages = ref([])
-let socket = null
+const socketStore = useSocketStore()
+const {connected, messages} = storeToRefs(socketStore)
 
 const handleConnect = async (callback) => {
-  const token = localStorage.getItem('token')
-  if (!token) {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.push('/login')
-    return
-  }
-  try {
-    socket = io(import.meta.env.VITE_APP_API_URL, {
-      auth: {
-        token: token
-      }
-    })
-    socket.on('connect', () => {
-      callback()
-      connected.value = true
-      setupSocketListeners(socket)
-      socket.emit('getAllMessages')
-    })
-    socket.on('disconnect', () => {
-      connected.value = false
-    })
-  } catch (e) {
-    console.log("Error on socket connect", e)
-    callback()
-  }
+  socketStore.connect(callback)
 }
 
-const setupSocketListeners = (socket) => {
-  socket.on('unauthorized', () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.push('/login')
-  })
+const handleSendMessage = (args) => socketStore.sendMessage(args)
 
-  socket.on('allMessages', (data) => {
-    messages.value = data
-  })
-
-  socket.on("newMessage", (data) => {
-    messages.value.push(data)
-  })
-}
-
-const handleSendMessage = ({message, callback}) => {
-  if (!message || message.trim() === '') {
-    return
-  }
-  callback()
-  socket.emit('sendMessage', message)
-}
-
-const handleDisconnect = () => {
-  if (socket) {
-    socket.disconnect()
-    connected.value = null
-  }
-}
-
-
+const handleDisconnect = () => socketStore.disconnect()
 </script>
