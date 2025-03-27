@@ -8,7 +8,9 @@
     transition="scale-transition"
     @input="onInput"
   >
-    <v-icon left class="mr-2">{{ toastIcon }}</v-icon>
+    <v-icon v-if="!toast.user_id" left class="mr-2">{{ toastIcon }}</v-icon>
+    <v-avatar v-else size="24" :color="getColor(toast.user_id)" :icon="getAvatar(toast.user_id)" />
+
     {{ toast.message }}
     <template v-slot:actions>
       <v-btn icon="mdi-close" text density="comfortable" @click="close"  />
@@ -18,6 +20,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import {getAvatar, getColor} from "@/utils/getAvatar.js";
 
 const props = defineProps({
   toast: {
@@ -30,7 +33,7 @@ const emit = defineEmits(['close']);
 const visible = ref(true);
 
 const toastColor = computed(() => {
-  if (props.toast.type === 'warning') return 'warning';
+  if (props.toast.type === 'warning' || props.toast.type === 'disconnected') return 'warning';
   if (props.toast.type === 'error') return 'error';
   return 'info';
 });

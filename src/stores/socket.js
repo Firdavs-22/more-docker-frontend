@@ -30,7 +30,6 @@ export const useSocketStore = defineStore('socket', {
           }
         })
         this.socket.on('connect', () => {
-
           callback()
           this.connected = true
           if (this.isFirstLoad) {
@@ -62,6 +61,23 @@ export const useSocketStore = defineStore('socket', {
         localStorage.removeItem('user')
         useRouter().push('/login')
       })
+
+      this.socket.on('userConnected', (data) => {
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        if (data.id !== currentUser.id) this.toastStore.addToast(`${data.username} connected`, {
+          type: "connected",
+          user_id: data.id
+        });
+      });
+
+      this.socket.on('userDisconnected', (data) => {
+        const currentUser = JSON.parse(localStorage.getItem('user'));
+        if (data.id !== currentUser.id) this.toastStore.addToast(`${data.username} disconnected`, {
+          type: 'disconnected',
+          user_id: data.id
+        });
+
+      });
 
       this.socket.on('allMessages', async (data) => {
         if (data.length === 0) {
@@ -106,7 +122,7 @@ export const useSocketStore = defineStore('socket', {
         const data = this.messages.find(message => message.id === message_id)
         if (data) {
           const user = JSON.parse(localStorage.getItem('user'))
-          console.log(user.id , data.user_id)
+          console.log(user.id, data.user_id)
           if (user.id !== data.user_id) {
             this.toastStore.addToast(`${data.username} deleted a message`)
           } else {

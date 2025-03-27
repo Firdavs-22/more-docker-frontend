@@ -9,7 +9,9 @@ export const useToastStore = defineStore('toast', {
       const id = Date.now() + Math.random();
       const timeout = options.timeout || 3000;
       const type = options.type || 'info';
-      this.toasts.push({id, message, timeout, type});
+      const user_id = options.user_id || null;
+
+      this.toasts.push({id, message, timeout, type, user_id});
       setTimeout(() => {
         this.removeToast(id);
       }, timeout);
