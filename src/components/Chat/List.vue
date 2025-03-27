@@ -67,8 +67,7 @@ const props = defineProps({
   },
   connected: Boolean
 })
-
-const emit = defineEmits(['createMessage'])
+const emit = defineEmits(['createMessage',"nextMessages"])
 
 const handleCreateMessage = () => {
   if (!newMessages.value || newMessages.value.toString().trim() === "") {
@@ -95,6 +94,10 @@ const handleScroll = () => {
     const position = chatContainer.value.scrollTop + chatContainer.value.clientHeight
     const height = chatContainer.value.scrollHeight
     atBottom.value = position >= height - threshold
+
+    if (chatContainer.value.scrollTop === 0) {
+      emit("nextMessages")
+    }
   }
 }
 

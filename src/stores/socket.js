@@ -3,11 +3,13 @@ import {io} from 'socket.io-client'
 import {nextTick} from "vue";
 import {useRouter} from "vue-router";
 
-export const useSocketStore = defineStore('socket',{
+export const useSocketStore = defineStore('socket', {
   state: () => ({
     connected: null,
     messages: [],
     socket: null,
+    isLastMessage: true,
+    lastMessageId: null
   }),
   actions: {
     async connect(callback) {
@@ -46,6 +48,14 @@ export const useSocketStore = defineStore('socket',{
       })
 
       this.socket.on('allMessages', async (data) => {
+        if (data.length === 0) {
+          this.isLastMessage = true
+          this.lastMessageId = null
+        }
+        this.isLastMessage = false
+        data.reverse()
+        this.lastMessageId = data[0].id
+
         this.messages = data
         await nextTick()
         this.scrollToBottom()
@@ -56,8 +66,28 @@ export const useSocketStore = defineStore('socket',{
         await nextTick()
         this.scrollToBottom()
       })
+
+      this.socket.on('nextMessages', async (data) => {
+        const chatContainer = document.querySelector('.chat-container')
+        const currentScrollHeight = chatContainer.scrollHeight
+        const currentScrollTop = chatContainer.scrollTop
+
+        data.reverse()
+        if (data.length === 0 || data.length < 20) {
+          this.isLastMessage = true
+          this.lastMessageId = null
+        } else {
+          this.isLastMessage = false
+          this.lastMessageId = data[0].id
+        }
+
+        this.messages = [...data, ...this.messages]
+        await nextTick()
+        chatContainer.scrollTop = chatContainer.scrollHeight - currentScrollHeight + currentScrollTop
+
+      })
     },
-    sendMessage({ message, callback }) {
+    sendMessage({message, callback}) {
       if (!message || message.trim() === '') {
         return
       }
@@ -74,6 +104,11 @@ export const useSocketStore = defineStore('socket',{
       const chatContainer = document.querySelector('.chat-container')
       if (chatContainer) {
         chatContainer.scrollTop = chatContainer.scrollHeight
+      }
+    },
+    nextMessages() {
+      if (!this.isLastMessage && this.lastMessageId) {
+        this.socket.emit('nextMessages', this.lastMessageId)
       }
     }
   },

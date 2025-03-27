@@ -16,7 +16,7 @@
     </v-toolbar>
 
 
-    <List :messages="messages" :connected="connected" @createMessage="handleSendMessage"/>
+    <List :messages="messages" :connected="connected" @createMessage="handleSendMessage" @nextMessages="socketStore.nextMessages"/>
   </v-card>
 </template>
 
