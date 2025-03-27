@@ -93,10 +93,18 @@ export const useSocketStore = defineStore('socket', {
       })
 
       this.socket.on("newMessage", async (data) => {
+        const chatContainer = document.querySelector('.chat-container');
+        const threshold = 800;
+        const isNearBottom = chatContainer.scrollHeight - chatContainer.scrollTop - chatContainer.clientHeight < threshold;
         if (data.user_id !== JSON.parse(localStorage.getItem('user')).id) {
           this.toastStore.addToast(`New message from: ${data.username}`)
         }
         this.messages.push(data)
+
+        await nextTick()
+        if (isNearBottom) {
+          this.scrollToBottom()
+        }
       })
 
       this.socket.on('nextMessages', async (data) => {
