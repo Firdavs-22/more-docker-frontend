@@ -2,7 +2,6 @@ import {defineStore} from 'pinia'
 import {io} from 'socket.io-client'
 import {nextTick} from "vue";
 import {useRouter} from "vue-router";
-import {th} from "vuetify/locale";
 
 export const useSocketStore = defineStore('socket', {
   state: () => ({
