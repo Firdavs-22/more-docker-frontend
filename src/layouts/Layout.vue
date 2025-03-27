@@ -23,9 +23,9 @@
 
       <template #append>
         <v-btn class="ms-1">
-          <v-icon icon="mdi-account-outline" size="x-large" class="mr-1"/>
-          <span style="text-transform: none;">
-            {{ userName }}
+          <v-avatar :color="getColor(user.id)" density="compact"  class="mr-1" :icon="getAvatar(user.id)"/>
+          <span style="text-transform: none;" class="text-body-1 font-weight-bold">
+            {{ user.username }}
           </span>
 
           <v-menu activator="parent" origin="top">
@@ -81,6 +81,7 @@ import {useRoute, useRouter} from "vue-router";
 import {useSocketStore} from "@/stores/socket";
 import {useToastStore} from "@/stores/toast";
 import Toast from "@/components/UI/Toast.vue";
+import {getAvatar, getColor} from "@/utils/getAvatar";
 
 const route = useRoute();
 const router = useRouter();
@@ -98,11 +99,13 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  userName: {
-    type: String,
+  user: {
+    type: Object,
     required: true,
   }
 })
+
+console.log(props.user)
 
 const signOut = () => {
   localStorage.removeItem("token")

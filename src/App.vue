@@ -32,7 +32,7 @@ const layout = computed(() => {
 const layoutProps = computed(() => {
   return route.meta.layout === 'auth' ? {} : {
     items,
-    userName: userName.value
+    user: user ? user.value : null
   };
 });
 
@@ -54,18 +54,18 @@ const items = [
   }
 ]
 
-const userName = ref("");
+const user = ref(JSON.parse(localStorage.getItem("user")));
 
 const updatePage = async () => {
   const token = localStorage.getItem("token");
   if (token) {
     const user = JSON.parse(localStorage.getItem("user"));
-    if(user && user.username){
+    if(user && user.id){
       try {
         const res = await axios.get("/user/me");
         if (res.status === 200) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          userName.value = res.data.user.username;
+          user.value = res.data.user;
         } else {
           localStorage.removeItem("token")
           localStorage.removeItem("user");
