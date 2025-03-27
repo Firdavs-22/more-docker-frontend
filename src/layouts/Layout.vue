@@ -88,7 +88,8 @@ const socket = useSocketStore()
 const toastStore = useToastStore()
 
 function calcMargin(i) {
-  return (i * 60) + 'px';
+  if (i === 0) return 20 + 'px';
+  return (i * 60 + 20) + 'px';
 }
 
 const drawer = shallowRef(false)

@@ -30,13 +30,16 @@ export const useSocketStore = defineStore('socket', {
           }
         })
         this.socket.on('connect', () => {
-          this.toastStore.addToast("Connected to chat")
+
           callback()
           this.connected = true
           if (this.isFirstLoad) {
+            this.toastStore.addToast("Connected to chat")
             this.isFirstLoad = false
             this.setupSocketListeners()
             this.socket.emit('getAllMessages')
+          } else {
+            this.toastStore.addToast("Reconnected to chat")
           }
         })
         this.socket.on('disconnect', () => {
