@@ -16,6 +16,10 @@
     <v-list-item-subtitle>
       {{ message.message }}
     </v-list-item-subtitle>
+
+    <template v-if="deletable" v-slot:append>
+      <v-btn color="red" icon="mdi-delete" density="compact" size="small" variant="text" class="mr-1" @click="$emit('deleteMessage')" />
+    </template>
   </v-list-item>
 </template>
 
@@ -29,7 +33,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  deletable: Boolean
 })
+
+const emit = defineEmits(['deleteMessage'])
 
 const timeDifference = ref(getTimeDifference(props.message.created_at))
 

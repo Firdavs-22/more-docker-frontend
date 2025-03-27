@@ -6,6 +6,8 @@
           v-for="message in messages"
           :key="message.id"
           :message="message"
+          @deleteMessage="() => handleDeleteMessage(message)"
+          :deletable="isDeletable(message.user_id)"
         />
       </v-list>
 
@@ -67,7 +69,12 @@ const props = defineProps({
   },
   connected: Boolean
 })
-const emit = defineEmits(['createMessage',"nextMessages"])
+const emit = defineEmits(['createMessage', "nextMessages", "deleteMessage"])
+
+const chatContainer = ref(null)
+const atBottom = ref(true)
+const newMessages = ref("")
+const errorMessage = ref("")
 
 const handleCreateMessage = () => {
   if (!newMessages.value || newMessages.value.toString().trim() === "") {
@@ -82,11 +89,6 @@ const handleCreateMessage = () => {
     }
   })
 }
-
-const chatContainer = ref(null)
-const atBottom = ref(true)
-const newMessages = ref("")
-const errorMessage = ref("")
 
 const handleScroll = () => {
   if (chatContainer.value) {
@@ -114,6 +116,16 @@ const scrollToBottom = () => {
   if (chatContainer.value) {
     chatContainer.value.scrollTop = chatContainer.value.scrollHeight
   }
+}
+
+const user = JSON.parse(localStorage.getItem('user'))
+const isDeletable = (user_id) => {
+  return Number(user.id) === user_id
+}
+
+
+const handleDeleteMessage = (item) => {
+  if (isDeletable(item.user_id)) emit('deleteMessage', item.id)
 }
 
 onMounted(scrollToBottom)

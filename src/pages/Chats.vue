@@ -15,8 +15,13 @@
       </v-card-actions>
     </v-toolbar>
 
-
-    <List :messages="messages" :connected="connected" @createMessage="handleSendMessage" @nextMessages="socketStore.nextMessages"/>
+    <List
+      :messages="messages"
+      :connected="connected"
+      @createMessage="handleSendMessage"
+      @nextMessages="socketStore.nextMessages"
+      @deleteMessage="socketStore.deleteMessage"
+    />
   </v-card>
 </template>
 

@@ -9,6 +9,7 @@
 <!--
 
 Add on TodoPage the search
+Add on UserPage the search
 Add the toast use https://vuetifyjs.com/en/components/snackbars
 
 -->

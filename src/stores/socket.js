@@ -86,6 +86,11 @@ export const useSocketStore = defineStore('socket', {
         chatContainer.scrollTop = chatContainer.scrollHeight - currentScrollHeight + currentScrollTop
 
       })
+
+      this.socket.on('messageDeleted', async (message_id) => {
+        this.messages = this.messages.filter(message => message.id !== message_id)
+        this.messages = this.messages.filter(message => message.id !== message_id)
+      })
     },
     sendMessage({message, callback}) {
       if (!message || message.trim() === '') {
@@ -110,6 +115,9 @@ export const useSocketStore = defineStore('socket', {
       if (!this.isLastMessage && this.lastMessageId) {
         this.socket.emit('nextMessages', this.lastMessageId)
       }
+    },
+    deleteMessage(message_id) {
+      this.socket.emit('deleteMessage', message_id)
     }
   },
 })
