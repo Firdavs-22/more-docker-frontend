@@ -130,10 +130,6 @@ const handleDeleteMessage = (item) => {
 
 onMounted(scrollToBottom)
 
-watch(props.messages, () => {
-  nextTick().then(() => scrollToBottom())
-})
-
 </script>
 
 <style scoped>

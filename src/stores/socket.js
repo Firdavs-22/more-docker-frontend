@@ -52,6 +52,9 @@ export const useSocketStore = defineStore('socket', {
     },
     setupSocketListeners() {
       this.socket.on('unauthorized', () => {
+        this.toastStore.addToast("Unauthorized", {
+          type: 'error'
+        })
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         useRouter().push('/login')
@@ -71,9 +74,10 @@ export const useSocketStore = defineStore('socket', {
       })
 
       this.socket.on("newMessage", async (data) => {
+        if (data.user_id !== JSON.parse(localStorage.getItem('user')).id) {
+          this.toastStore.addToast(`New message from: ${data.username}`)
+        }
         this.messages.push(data)
-        await nextTick()
-        this.scrollToBottom()
       })
 
       this.socket.on('nextMessages', async (data) => {
@@ -96,7 +100,16 @@ export const useSocketStore = defineStore('socket', {
       })
 
       this.socket.on('messageDeleted', async (message_id) => {
-        this.messages = this.messages.filter(message => message.id !== message_id)
+        const data = this.messages.find(message => message.id === message_id)
+        if (data) {
+          const user = JSON.parse(localStorage.getItem('user'))
+          console.log(user.id , data.user_id)
+          if (user.id !== data.user_id) {
+            this.toastStore.addToast(`${data.username} deleted a message`)
+          } else {
+            this.toastStore.addToast(`You deleted a message`)
+          }
+        }
         this.messages = this.messages.filter(message => message.id !== message_id)
       })
     },
