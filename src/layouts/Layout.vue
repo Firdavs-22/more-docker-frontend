@@ -105,8 +105,6 @@ const props = defineProps({
   }
 })
 
-console.log(props.user)
-
 const signOut = () => {
   localStorage.removeItem("token")
   localStorage.removeItem("user")

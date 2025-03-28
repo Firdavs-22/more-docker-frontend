@@ -5,7 +5,6 @@
   >
     <v-toolbar image="https://cdn.vuetifyjs.com/docs/images/cards/purple-flowers.jpg">
       <v-toolbar-title>Users</v-toolbar-title>
-      <v-btn icon="mdi-magnify" variant="text"></v-btn>
     </v-toolbar>
 
     <List :users="users"/>

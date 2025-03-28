@@ -14,7 +14,7 @@ export default defineConfig({
         Vue({
             template: {transformAssetUrls}
         }),
-        // vueDevTools(),
+        vueDevTools(),
         Vuetify(),
         Components(),
         ViteFonts({

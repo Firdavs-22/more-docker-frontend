@@ -6,14 +6,6 @@
   </v-app>
 </template>
 
-<!--
-
-Add on TodoPage the search
-Add on UserPage the search
-Add the toast use https://vuetifyjs.com/en/components/snackbars
-
--->
-
 <script setup>
 import {computed, onMounted, ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
